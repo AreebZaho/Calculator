@@ -5,13 +5,18 @@
     font-family: 'Poppins', sans-serif;
     border: none;
 }
-.body {
+body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
     width: 100vw;
 }
+h1 {
+    margin: -1.5rem 0 1.5rem;
+}
+
 .calc {
     background-color: rgba(0, 0, 0, 0.699);
     height: 500px;
@@ -45,9 +50,6 @@
     justify-content: center;
     font-size: 1.5rem;
 }
-#zero {
-    width: 150px;
-}
 .btnClick {
     background-color: rgba(255, 255, 255, 0.559);
     font-size: 1.25rem;
@@ -56,14 +58,12 @@
 .gray {
     display: flex;
     position: relative;
-    /* top: 10%; */
 }
 .dark {
     display: flex;
     flex-wrap: wrap;
     width: 225px;
     position: relative;
-    /* top: 23%; */
 }
 .orange {
     display: flex;

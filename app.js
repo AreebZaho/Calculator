@@ -1,23 +1,13 @@
-const one = document.querySelector('#one');
-const two = document.querySelector('#two');
-const three = document.querySelector('#three');
-const four = document.querySelector('#four');
-const five = document.querySelector('#five');
-const six = document.querySelector('#six');
-const seven = document.querySelector('#seven');
-const eight = document.querySelector('#eight');
-const nine = document.querySelector('#nine');
-const point = document.querySelector('#point');
-
+const equal = document.querySelector('#equal');
 const plus = document.querySelector('#plus');
 const minus = document.querySelector('#minus');
 const mult = document.querySelector('#mult');
 const div = document.querySelector('#div');
-const equal = document.querySelector('#equal');
 
 const clear = document.querySelector('#clear');
 const sign = document.querySelector('#sign');
 const perct = document.querySelector('#perct');
+const del = document.querySelector('#del');
 
 const input = document.querySelector('#input');
 const prev = document.querySelector('#prev');
@@ -80,9 +70,18 @@ equal.addEventListener('click', () => {
     else if (peek() == '+' || peek() == '-' || peek() == 'x' || peek() == '/' || peek() == '%') exp.pop();
     input.innerText = '';
     prev.innerText = exp.join(' ');
+    console.log(exp);
+
     let ans = operationSolver(exp);
-    exp.splice(0, exp.length).push(ans);
+    exp.splice(0, exp.length);//emptying expression array
+    exp.push(ans);
     input.innerText = ans;
+    console.log(ans);
+
+})
+
+del.addEventListener('click', () => {
+    input.innerText = input.innerText.slice(0, -1);
 })
 
 clear.addEventListener('click', () => {
@@ -95,6 +94,40 @@ clear.addEventListener('click', () => {
 })
 
 operationSolver = (exp) => {
-    
+    let div = [];
+    //resolving divides
+    for (let i = 0; i < exp.length; i++) {
+        if (exp[i] != '/') div.push(exp[i]);
+        else {
+            let a = div[div.length-1];
+            let b = exp[i+1];
+            let newNum = a/b;
+            div[div.length-1] = newNum;
+            i++;
+        }
+    }
+    console.log(div);
+    //resolving multiply
+    let mult = [];
+    for (let i = 0; i < div.length; i++) {
+        if (div[i] != 'x') mult.push(div[i]);
+        else {
+            let a = mult[mult.length-1];
+            let b = div[i+1];
+            let newNum = a*b;
+            mult[mult.length-1] = newNum;
+            i++;
+        }
+    }
+    console.log(mult);
+    //resolving + and -
+    let ans = mult[0];
+    for (let i = 1; i < mult.length-1; i += 2) {
+        if (mult[i] == '+') ans += mult[i+1];
+        else ans -= mult[i+1];//subtract (-)
+    }
+    // console.log(ans);
+    return ans;
 }
+
 
