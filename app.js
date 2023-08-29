@@ -22,10 +22,35 @@ const perct = document.querySelector('#perct');
 const input = document.querySelector('#input');
 const prev = document.querySelector('#prev');
 
+const exp = [];
+const peek = () => { return exp[exp.length-1]; }
+
+const operts = document.querySelectorAll('.opert');
+for (let opert of operts) {
+    opert.addEventListener('click', () => {
+        opert.classList.add('btnClick');//added perma shine to operators until another button pressed
+        for (let otherOpert of operts) {//other operts shine removed
+            if (otherOpert != opert) otherOpert.classList.remove('btnClick');
+        }
+        if (input.innerText != '') {
+            exp.push(parseFloat(input.innerText));
+            input.innerText = '';
+            prev.innerText = exp.join(' ');
+            clear.innerText = 'AC';
+        }
+        else if (peek() == '+' || peek() == '-' || peek() == 'x' || peek() == '/' || peek() == '%') exp.pop();//opert overriding
+        exp.push(opert.innerText);
+    })
+}
 
 const btns = document.querySelectorAll('.btn');
 for (let btn of btns) {
+    if (btn.classList.contains('opert')) continue;//not applying quick flash on operators
     btn.addEventListener('click', () => {
+        //remove shining from operator
+        for (let opert of operts) {
+            opert.classList.remove('btnClick');
+        }
         btn.classList.add('btnClick');
         setTimeout(() => {
             btn.classList.remove('btnClick');
@@ -49,26 +74,15 @@ sign.addEventListener('click', (e) => {
     else input.innerText = '-' + input.innerText;
 })
 
-const exp = [];
-const peek = () => { return exp[exp.length-1]; }
-
-const operts = document.querySelectorAll('.opert');
-for (let opert of operts) {
-    opert.addEventListener('click', () => {
-        exp.push(parseFloat(input.innerText));
-        input.innerText = "";
-        clear.innerText = 'AC';
-        exp.push(opert.innerText);
-    })
-}
-
 equal.addEventListener('click', () => {
     clear.innerText = 'AC';
     if (input.innerText != '') exp.push(parseFloat(input.innerText)); 
     else if (peek() == '+' || peek() == '-' || peek() == 'x' || peek() == '/' || peek() == '%') exp.pop();
     input.innerText = '';
-    console.log(exp);
-
+    prev.innerText = exp.join(' ');
+    let ans = operationSolver(exp);
+    exp.splice(0, exp.length).push(ans);
+    input.innerText = ans;
 })
 
 clear.addEventListener('click', () => {
@@ -76,17 +90,11 @@ clear.addEventListener('click', () => {
         input.innerText = '';
         clear.innerText = 'AC';
     }
-    else if (clear.innerText == 'AC') exp.splice(0);
+    else exp.splice(0);
+    prev.innerText = exp.join(' ');
 })
 
-
-
-
-
-
-
-
-
-
-
+operationSolver = (exp) => {
+    
+}
 
