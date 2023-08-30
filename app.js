@@ -1,9 +1,3 @@
-const equal = document.querySelector('#equal');
-const plus = document.querySelector('#plus');
-const minus = document.querySelector('#minus');
-const mult = document.querySelector('#mult');
-const div = document.querySelector('#div');
-
 const clear = document.querySelector('#clear');
 const sign = document.querySelector('#sign');
 const perct = document.querySelector('#perct');
@@ -18,9 +12,9 @@ const peek = () => { return exp[exp.length-1]; }
 const operts = document.querySelectorAll('.opert');
 for (let opert of operts) {
     opert.addEventListener('click', () => {
-        opert.classList.add('btnClick');//added perma shine to operators until another button pressed
+        opert.classList.add('btnClickOpert');//added perma shine to operators until another button pressed
         for (let otherOpert of operts) {//other operts shine removed
-            if (otherOpert != opert) otherOpert.classList.remove('btnClick');
+            if (otherOpert != opert) otherOpert.classList.remove('btnClickOpert');
         }
         if (input.innerText != '') {
             exp.push(parseFloat(input.innerText));
@@ -37,10 +31,10 @@ const btns = document.querySelectorAll('.btn');
 for (let btn of btns) {
     if (btn.classList.contains('opert')) continue;//not applying quick flash on operators
     btn.addEventListener('click', () => {
-        //remove shining from operator
-        for (let opert of operts) {
-            opert.classList.remove('btnClick');
+        for (let opert of operts) {//remove shining from operator
+            opert.classList.remove('btnClickOpert');
         }
+        //add to btn with timeout
         btn.classList.add('btnClick');
         setTimeout(() => {
             btn.classList.remove('btnClick');
@@ -64,20 +58,17 @@ sign.addEventListener('click', (e) => {
     else input.innerText = '-' + input.innerText;
 })
 
+perct.addEventListener('click', () => {
+    input.innerText = (Number.parseFloat(input.innerText)/100).toString();
+})
+
 equal.addEventListener('click', () => {
     clear.innerText = 'AC';
     if (input.innerText != '') exp.push(parseFloat(input.innerText)); 
     else if (peek() == '+' || peek() == '-' || peek() == 'x' || peek() == '/' || peek() == '%') exp.pop();
     input.innerText = '';
     prev.innerText = exp.join(' ');
-    console.log(exp);
-
-    let ans = operationSolver(exp);
-    exp.splice(0, exp.length);//emptying expression array
-    exp.push(ans);
-    input.innerText = ans;
-    console.log(ans);
-
+    input.innerText = operationSolver(exp);
 })
 
 del.addEventListener('click', () => {
@@ -85,49 +76,48 @@ del.addEventListener('click', () => {
 })
 
 clear.addEventListener('click', () => {
-    if (clear.innerText == 'C') {
-        input.innerText = '';
-        clear.innerText = 'AC';
-    }
+    if (clear.innerText == 'C') clear.innerText = 'AC';
     else exp.splice(0);
+
+    input.innerText = '';
     prev.innerText = exp.join(' ');
 })
 
 operationSolver = (exp) => {
-    let div = [];
     //resolving divides
     for (let i = 0; i < exp.length; i++) {
-        if (exp[i] != '/') div.push(exp[i]);
-        else {
-            let a = div[div.length-1];
+        if (exp[i] == '/') {
+            let a = exp[i-1];
             let b = exp[i+1];
             let newNum = a/b;
-            div[div.length-1] = newNum;
-            i++;
+            exp[i-1] = newNum;
+            exp.splice(i, 2);
         }
     }
-    console.log(div);
     //resolving multiply
-    let mult = [];
-    for (let i = 0; i < div.length; i++) {
-        if (div[i] != 'x') mult.push(div[i]);
-        else {
-            let a = mult[mult.length-1];
-            let b = div[i+1];
+    for (let i = 0; i < exp.length; i++) {
+        if (exp[i] == 'x') {
+            let a = exp[i-1];
+            let b = exp[i+1];
             let newNum = a*b;
-            mult[mult.length-1] = newNum;
-            i++;
+            exp[i-1] = newNum;
+            exp.splice(i, 2);
         }
     }
-    console.log(mult);
     //resolving + and -
-    let ans = mult[0];
-    for (let i = 1; i < mult.length-1; i += 2) {
-        if (mult[i] == '+') ans += mult[i+1];
-        else ans -= mult[i+1];//subtract (-)
+    let ans = exp[0];
+    for (let i = 1; i < exp.length; i += 2) {
+        if (exp[i] == '+') ans += exp[i+1];
+        else ans -= exp[i+1];//subtract (-)
     }
-    // console.log(ans);
-    return ans;
+    exp.splice(0, exp.length);
+    return formatAns(ans);
+}
+
+formatAns = (ans) => {
+    const decimalDigits = ans.toString().split('.')[1];
+    if (decimalDigits && decimalDigits.length > 6) return ans.toFixed(6);
+    else return ans;
 }
 
 
