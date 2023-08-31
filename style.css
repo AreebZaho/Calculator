@@ -45,7 +45,6 @@ h1:hover::before {
     justify-content: center;
     align-items: center;
     width: 100%;
-    color: white;
 }
 #prev {
     height: 50px;
