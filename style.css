@@ -32,7 +32,6 @@ h1::before {
 h1:hover::before {
     width: 100%;
 }
-
 .calc {
     height: 496px;
     width: 300px;
@@ -40,7 +39,6 @@ h1:hover::before {
     border-radius: 15px;
     background-color: #0000004e;
 }
-
 .display {
     display: flex;
     justify-content: center;
@@ -58,7 +56,6 @@ h1:hover::before {
     font-size: 1.5rem;
     color: white;
 }
-
 .btn {
     height: 75px;
     aspect-ratio: 1/1;
@@ -109,7 +106,6 @@ h1:hover::before {
     background: linear-gradient(to bottom, #FFA500, #FF9F00, #FF8E00, #FF7D00, #FF6C00, #FF5B00);
     border-bottom-right-radius: 15px;
 }
-
 @keyframes btnGlow {
     0%, 100% {
         background-color: rgba(255, 255, 255, 0.5);

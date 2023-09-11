@@ -12,8 +12,8 @@ const peek = () => { return exp[exp.length-1]; }
 const operts = document.querySelectorAll('.opert');
 for (let opert of operts) {
     opert.addEventListener('click', () => {
-        opert.classList.add('btnClickOpert');//added perma shine to operators until another button pressed
-        for (let otherOpert of operts) {//other operts shine removed
+        opert.classList.add('btnClickOpert');
+        for (let otherOpert of operts) {
             if (otherOpert != opert) otherOpert.classList.remove('btnClickOpert');
         }
         if (input.innerText != '') {
@@ -29,12 +29,11 @@ for (let opert of operts) {
 
 const btns = document.querySelectorAll('.btn');
 for (let btn of btns) {
-    if (btn.classList.contains('opert')) continue;//not applying quick flash on operators
+    if (btn.classList.contains('opert')) continue;
     btn.addEventListener('click', () => {
-        for (let opert of operts) {//remove shining from operator
+        for (let opert of operts) {
             opert.classList.remove('btnClickOpert');
         }
-        //add to btn with timeout
         btn.classList.add('btnClick');
         setTimeout(() => {
             btn.classList.remove('btnClick');
@@ -84,7 +83,6 @@ clear.addEventListener('click', () => {
 })
 
 operationSolver = (exp) => {
-    //resolving divides
     for (let i = 0; i < exp.length; i++) {
         if (exp[i] == '/') {
             let a = exp[i-1];
@@ -94,7 +92,6 @@ operationSolver = (exp) => {
             exp.splice(i, 2);
         }
     }
-    //resolving multiply
     for (let i = 0; i < exp.length; i++) {
         if (exp[i] == 'x') {
             let a = exp[i-1];
@@ -104,7 +101,6 @@ operationSolver = (exp) => {
             exp.splice(i, 2);
         }
     }
-    //resolving + and -
     let ans = exp[0];
     for (let i = 1; i < exp.length; i += 2) {
         if (exp[i] == '+') ans += exp[i+1];
@@ -119,5 +115,3 @@ formatAns = (ans) => {
     if (decimalDigits && decimalDigits.length > 6) return ans.toFixed(6);
     else return ans;
 }
-
-
